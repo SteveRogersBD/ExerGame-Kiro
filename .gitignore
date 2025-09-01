@@ -1,0 +1,66 @@
+############################
+# Java / Spring Boot
+############################
+*.class
+*.jar
+*.war
+*.ear
+
+# Logs
+*.log
+logs/
+log/
+
+# Build directories
+target/
+build/
+out/
+
+# Spring Boot specific
+BOOT-INF/
+META-INF/
+
+############################
+# IDEs & Editors
+############################
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+
+# VS Code
+.vscode/
+
+############################
+# OS generated
+############################
+.DS_Store
+Thumbs.db
+
+############################
+# Environment & Secrets
+############################
+# app secrets
+*.env
+.env.local
+.env.*
+.env
+# firebase / api keys
+Backend (Java)\ImageService\src\main\resources\application.yaml
+Backend (Java)\ImageService\atomica-cbcd3-firebase-adminsdk-ca3ot-60097558fe.json
+
+Backend (Java)/ImageService/atomica-*-firebase-adminsdk-*.json
+Backend (Java)/ImageService/src/main/resources/application.yaml
+Backend (Java)/ImageService/src/main/resources/secrets.properties
+
+
+############################
+# Others
+############################
+# backup / temp files
+*~
+*.swp
+node_modules/
+/project/node_modules/
