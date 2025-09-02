@@ -60,7 +60,7 @@ export default function Header() {
             {['How It Works', 'Features', 'Parent Zone'].map((item, index) => (
               <motion.a
                 key={item}
-                href="#"
+                href={item === 'Parent Zone' ? '/parent/auth' : '#'}
                 className="text-gray-700 hover:text-wiggle-purple font-semibold transition-colors relative"
                 whileHover={{ scale: 1.1, y: -2 }}
                 initial={{ opacity: 0, y: -20 }}

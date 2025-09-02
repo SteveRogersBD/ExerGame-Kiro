@@ -39,7 +39,7 @@ export default function Footer() {
               {links.map((link, index) => (
                 <motion.a
                   key={link}
-                  href="#"
+                  href={link === 'Parent Zone' ? '/parent/auth' : '#'}
                   className="text-gray-700 hover:text-wiggle-purple font-semibold text-lg transition-colors relative"
                   whileHover={{ scale: 1.1, y: -2 }}
                   initial={{ opacity: 0, y: 20 }}
