@@ -74,7 +74,6 @@ export default function ParentAuth() {
                   alt="Friendly tiger welcoming parents"
                   width={400}
                   height={400}
-                  // className="w-full h-full object-contain"
                   className="w-full h-full object-contain rounded-2xl" 
                   priority
                 />

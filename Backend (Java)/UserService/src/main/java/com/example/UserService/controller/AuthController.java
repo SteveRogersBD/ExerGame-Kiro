@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/public/auth")
 @RequiredArgsConstructor
 @Slf4j
 public class AuthController {
@@ -29,9 +29,9 @@ public class AuthController {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<UserResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request) {
         log.info("Login request received for email: {}", request.getEmail());
-        UserResponse response = authService.login(request);
+        String response = authService.login(request);
         return ResponseEntity.ok(response);
     }
     

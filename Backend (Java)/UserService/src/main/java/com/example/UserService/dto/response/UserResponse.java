@@ -14,10 +14,11 @@ import java.util.List;
 public class UserResponse {
     
     private Long id;
+    private String fullName;
+    private String username;
     private String email;
     private User.Role role;
     private String dpUrl;
     private List<Long> children;
-    private String preferences;
     private LocalDateTime createdAt;
 }

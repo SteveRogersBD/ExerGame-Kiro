@@ -18,14 +18,17 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
+    @Column(name = "fullname", nullable = false)
+    private String fullName;
+
     @Column(unique = true, nullable = false)
     private String email;
     
     @Column(name = "password_hash", nullable = false)
     private String password;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username")
     private String username;
     
     @Enumerated(EnumType.STRING)
@@ -40,10 +43,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "child_id")
     private List<Long> children;
-    
-    @Column(columnDefinition = "JSON")
-    private String preferences;
-    
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -52,4 +52,10 @@ public class User {
         USER, ADMIN
     }
 
+    @PrePersist
+    public void prePersist() {
+        this.role = Role.USER;
+        this.children = List.of();
+        this.createdAt = LocalDateTime.now();
+    }
 }

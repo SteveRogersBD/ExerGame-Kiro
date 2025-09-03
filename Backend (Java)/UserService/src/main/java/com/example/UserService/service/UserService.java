@@ -75,12 +75,7 @@ public class UserService {
             user.setChildren(request.getChildren());
             log.debug("Updated children list for user: {}", userId);
         }
-        
-        if (request.getPreferences() != null) {
-            user.setPreferences(request.getPreferences());
-            log.debug("Updated preferences for user: {}", userId);
-        }
-        
+
         User savedUser = userRepo.save(user);
         log.info("Successfully updated user: {}", userId);
         return mapToUserResponse(savedUser);
@@ -171,7 +166,6 @@ public class UserService {
         response.setRole(user.getRole());
         response.setDpUrl(user.getDpUrl());
         response.setChildren(user.getChildren());
-        response.setPreferences(user.getPreferences());
         response.setCreatedAt(user.getCreatedAt());
         return response;
     }
