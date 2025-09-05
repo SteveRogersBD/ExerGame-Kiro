@@ -54,7 +54,7 @@ Backend (Java)\ImageService\atomica-cbcd3-firebase-adminsdk-ca3ot-60097558fe.jso
 Backend (Java)/ImageService/atomica-*-firebase-adminsdk-*.json
 Backend (Java)/ImageService/src/main/resources/application.yaml
 Backend (Java)/ImageService/src/main/resources/secrets.properties
-
+Backend (Java)/UserService/src/main/resources/application.yaml
 
 ############################
 # Others
@@ -62,5 +62,4 @@ Backend (Java)/ImageService/src/main/resources/secrets.properties
 # backup / temp files
 *~
 *.swp
-node_modules/
 /project/node_modules/

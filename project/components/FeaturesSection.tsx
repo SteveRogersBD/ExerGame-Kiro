@@ -121,7 +121,7 @@ export default function FeaturesSection() {
                 <motion.div
                   className="text-4xl mb-3"
                   animate={{ 
-                    bounce: [0, -5, 0],
+                    y: [0, -5, 0],
                     rotate: [0, 5, -5, 0]
                   }}
                   transition={{

@@ -1,0 +1,6 @@
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="24" cy="24" r="24" fill="#A8E6CF"/>
+  <circle cx="24" cy="18" r="8" fill="#FFF"/>
+  <circle cx="24" cy="32" r="12" fill="#FFF"/>
+  <text x="24" y="28" text-anchor="middle" fill="#A8E6CF" font-size="16" font-weight="bold">S</text>
+</svg>

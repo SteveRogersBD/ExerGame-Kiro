@@ -5,11 +5,14 @@ import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function ParentAuth() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('create-account');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   
   // Create Account form state
   const [createForm, setCreateForm] = useState({
@@ -27,18 +30,74 @@ export default function ParentAuth() {
     rememberMe: false
   });
 
-  const handleCreateAccountSubmit = (e: React.FormEvent) => {
+  const handleCreateAccountSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Create account:', createForm);
-    // Show success toast (demo)
-    alert('Account created (demo)');
+    
+    // Validate passwords match
+    if (createForm.password !== createForm.confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+
+    setIsLoading(true);
+    
+    try {
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Store user data in localStorage for demo purposes
+      const userData = {
+        email: createForm.email,
+        fullName: createForm.fullName,
+        createdAt: new Date().toISOString()
+      };
+      
+      localStorage.setItem('authToken', 'demo-auth-token-' + Date.now());
+      localStorage.setItem('userData', JSON.stringify(userData));
+      
+      alert('Account created successfully!');
+      // Redirect to parent dashboard
+      router.push('/parent/dashboard');
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Registration failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleSignInSubmit = (e: React.FormEvent) => {
+  const handleSignInSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Sign in:', signInForm);
-    // Show success toast (demo)
-    alert('Signed in (demo)');
+    setIsLoading(true);
+    
+    try {
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // For demo purposes, accept any email/password combination
+      // In a real app, this would validate against a backend
+      if (signInForm.email && signInForm.password) {
+        const userData = {
+          email: signInForm.email,
+          fullName: 'Demo Parent',
+          loginAt: new Date().toISOString()
+        };
+        
+        localStorage.setItem('authToken', 'demo-auth-token-' + Date.now());
+        localStorage.setItem('userData', JSON.stringify(userData));
+        
+        alert('Signed in successfully!');
+        // Redirect to parent dashboard
+        router.push('/parent/dashboard');
+      } else {
+        alert('Please enter both email and password.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('Login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleGoogleSignIn = () => {
@@ -235,11 +294,12 @@ export default function ParentAuth() {
                     {/* Submit Button */}
                     <motion.button
                       type="submit"
-                      className="w-full bg-gradient-to-r from-wiggle-purple to-wiggle-pink text-white font-semibold py-3 px-6 rounded-xl hover:shadow-lg transition-all"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      disabled={isLoading}
+                      className="w-full bg-gradient-to-r from-wiggle-purple to-wiggle-pink text-white font-semibold py-3 px-6 rounded-xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      whileHover={{ scale: isLoading ? 1 : 1.02 }}
+                      whileTap={{ scale: isLoading ? 1 : 0.98 }}
                     >
-                      Create Account
+                      {isLoading ? 'Creating Account...' : 'Create Account'}
                     </motion.button>
 
                     {/* Switch to Sign In */}
@@ -340,11 +400,12 @@ export default function ParentAuth() {
                     {/* Submit Button */}
                     <motion.button
                       type="submit"
-                      className="w-full bg-gradient-to-r from-wiggle-purple to-wiggle-pink text-white font-semibold py-3 px-6 rounded-xl hover:shadow-lg transition-all"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      disabled={isLoading}
+                      className="w-full bg-gradient-to-r from-wiggle-purple to-wiggle-pink text-white font-semibold py-3 px-6 rounded-xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      whileHover={{ scale: isLoading ? 1 : 1.02 }}
+                      whileTap={{ scale: isLoading ? 1 : 0.98 }}
                     >
-                      Sign In
+                      {isLoading ? 'Signing In...' : 'Sign In'}
                     </motion.button>
 
                     {/* Forgot Links */}

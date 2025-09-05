@@ -28,11 +28,13 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
     
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request) {
+    @PostMapping(value="/login",
+            consumes = "application/json",
+            produces = "application/json")
+    public ResponseEntity<Map<String,String>> login(@Valid @RequestBody LoginRequest request) {
         log.info("Login request received for email: {}", request.getEmail());
         String response = authService.login(request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(Map.of("token",response));
     }
     
     @PostMapping("/logout")
