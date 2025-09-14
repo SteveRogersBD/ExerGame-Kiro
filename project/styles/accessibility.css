@@ -1,68 +1,7 @@
 /**
- * Enhanced accessibility styles for WiggleWorld authentication
- * Provides high contrast focus outlines and improved keyboard navigation
+ * Accessibility-focused CSS for the Kids Dashboard
+ * Includes high contrast mode, reduced motion, and child-friendly sizing
  */
-
-/* High contrast focus outlines for better visibility */
-.auth-focus-outline {
-  @apply focus:outline-none focus:ring-4 focus:ring-offset-2;
-}
-
-.auth-focus-pink {
-  @apply focus:ring-wiggle-pink/60;
-}
-
-.auth-focus-blue {
-  @apply focus:ring-wiggle-blue/60;
-}
-
-.auth-focus-purple {
-  @apply focus:ring-wiggle-purple/60;
-}
-
-.auth-focus-gray {
-  @apply focus:ring-gray-400/60;
-}
-
-/* Enhanced button focus states */
-.auth-button-focus {
-  @apply focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-wiggle-pink/60;
-}
-
-.auth-button-secondary-focus {
-  @apply focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-gray-400/60;
-}
-
-/* Enhanced input focus states */
-.auth-input-focus {
-  @apply focus:outline-none focus:ring-0 focus:border-pink-400 focus:shadow-[0_0_0_3px_rgba(255,109,213,0.2)];
-}
-
-.auth-input-error-focus {
-  @apply focus:border-red-500 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.2)];
-}
-
-/* Enhanced checkbox focus states */
-.auth-checkbox-focus {
-  @apply focus-within:ring-4 focus-within:ring-wiggle-pink/60 focus-within:ring-offset-1;
-}
-
-/* Enhanced tab focus states */
-.auth-tab-focus {
-  @apply focus:outline-none focus:ring-4 focus:ring-wiggle-pink/60 focus:ring-offset-2;
-}
-
-/* Enhanced link focus states */
-.auth-link-focus {
-  @apply focus:outline-none focus:ring-4 focus:ring-wiggle-pink/60 focus:ring-offset-1 rounded-sm;
-}
-
-/* Skip link for keyboard navigation */
-.skip-link {
-  @apply absolute -top-10 left-4 z-[9999] px-4 py-2 bg-wiggle-pink text-white font-semibold rounded-md;
-  @apply focus:top-4 focus:outline-none focus:ring-4 focus:ring-white/60 focus:ring-offset-2;
-  @apply transition-all duration-200;
-}
 
 /* Screen reader only content */
 .sr-only {
@@ -77,77 +16,476 @@
   border: 0;
 }
 
-/* Ensure sufficient color contrast for error states */
-.auth-error-text {
-  @apply text-red-700;
+/* Focus indicators */
+.focus-visible {
+  outline: 3px solid #FFD93D;
+  outline-offset: 2px;
+  border-radius: 8px;
 }
 
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  .auth-focus-outline {
-    @apply focus:ring-8 focus:ring-offset-4;
+/* Enhanced focus for high contrast mode */
+.high-contrast .focus-visible {
+  outline: 4px solid var(--hc-accent);
+  outline-offset: 3px;
+}
+
+/* High contrast mode styles */
+.high-contrast {
+  --wiggle-pink: var(--hc-accent);
+  --wiggle-purple: var(--hc-primary);
+  --wiggle-blue: var(--hc-accent);
+  --wiggle-green: var(--hc-success);
+  --wiggle-yellow: var(--hc-warning);
+}
+
+.high-contrast * {
+  background-color: var(--hc-background) !important;
+  color: var(--hc-text) !important;
+  border-color: var(--hc-border) !important;
+}
+
+.high-contrast button,
+.high-contrast .interactive-element {
+  background-color: var(--hc-surface) !important;
+  border: 3px solid var(--hc-border) !important;
+  color: var(--hc-text) !important;
+}
+
+.high-contrast button:hover,
+.high-contrast button:focus {
+  background-color: var(--hc-accent) !important;
+  color: var(--hc-background) !important;
+}
+
+/* Reduced motion preferences */
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Large text mode */
+.large-text {
+  font-size: 125% !important;
+}
+
+.large-text .text-sm {
+  font-size: 1.125rem !important; /* 18px */
+}
+
+.large-text .text-base {
+  font-size: 1.25rem !important; /* 20px */
+}
+
+.large-text .text-lg {
+  font-size: 1.5rem !important; /* 24px */
+}
+
+.large-text .text-xl {
+  font-size: 1.75rem !important; /* 28px */
+}
+
+.large-text .text-2xl {
+  font-size: 2rem !important; /* 32px */
+}
+
+.large-text .text-3xl {
+  font-size: 2.5rem !important; /* 40px */
+}
+
+.large-text .text-4xl {
+  font-size: 3rem !important; /* 48px */
+}
+
+/* Enhanced touch targets for children */
+.child-touch-target {
+  min-height: 60px;
+  min-width: 60px;
+  padding: 12px;
+  margin: 6px;
+}
+
+/* Extra large touch targets for very young children */
+.xl-touch-target {
+  min-height: 80px;
+  min-width: 80px;
+  padding: 16px;
+  margin: 8px;
+}
+
+/* Ensure adequate spacing between interactive elements */
+.interactive-spacing > * + * {
+  margin-top: 12px;
+}
+
+.interactive-spacing.horizontal > * + * {
+  margin-top: 0;
+  margin-left: 12px;
+}
+
+/* Screen reader mode enhancements */
+.screen-reader-mode {
+  /* Enhance text readability for screen readers */
+}
+
+.screen-reader-mode .decorative {
+  display: none;
+}
+
+.screen-reader-mode [aria-hidden="true"] {
+  display: none;
+}
+
+/* Responsive design for various screen sizes */
+
+/* Mobile phones (portrait) */
+@media (max-width: 480px) {
+  .child-touch-target {
+    min-height: 70px;
+    min-width: 70px;
+    font-size: 1.125rem;
   }
   
-  .auth-button-focus {
-    @apply focus:ring-8 focus:ring-offset-4;
+  .xl-touch-target {
+    min-height: 90px;
+    min-width: 90px;
+    font-size: 1.25rem;
   }
   
-  .auth-input-focus {
-    @apply focus:shadow-[0_0_0_6px_rgba(255,109,213,0.4)];
+  /* Increase spacing on small screens */
+  .interactive-spacing > * + * {
+    margin-top: 16px;
   }
   
-  .auth-error-text {
-    @apply text-red-800;
+  .interactive-spacing.horizontal > * + * {
+    margin-top: 0;
+    margin-left: 16px;
   }
 }
 
-/* Reduced motion support */
+/* Mobile phones (landscape) and small tablets */
+@media (min-width: 481px) and (max-width: 768px) {
+  .child-touch-target {
+    min-height: 65px;
+    min-width: 65px;
+  }
+  
+  .xl-touch-target {
+    min-height: 85px;
+    min-width: 85px;
+  }
+}
+
+/* Tablets (portrait) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .child-touch-target {
+    min-height: 60px;
+    min-width: 60px;
+  }
+  
+  .xl-touch-target {
+    min-height: 80px;
+    min-width: 80px;
+  }
+}
+
+/* Desktop and large tablets */
+@media (min-width: 1025px) {
+  .child-touch-target {
+    min-height: 60px;
+    min-width: 60px;
+  }
+  
+  .xl-touch-target {
+    min-height: 80px;
+    min-width: 80px;
+  }
+  
+  /* Hover states only on devices that support hover */
+  .child-touch-target:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
+  }
+  
+  .reduced-motion .child-touch-target:hover {
+    transform: none;
+  }
+}
+
+/* Orientation-specific styles */
+@media (orientation: landscape) {
+  .landscape-optimize {
+    flex-direction: row;
+  }
+  
+  .landscape-optimize .child-touch-target {
+    margin: 8px 12px;
+  }
+}
+
+@media (orientation: portrait) {
+  .portrait-optimize {
+    flex-direction: column;
+  }
+  
+  .portrait-optimize .child-touch-target {
+    margin: 12px 8px;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .child-touch-target {
+    /* Ensure crisp rendering on high DPI displays */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Print styles (for accessibility documentation) */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+  
+  * {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* Animation preferences */
 @media (prefers-reduced-motion: reduce) {
-  .auth-focus-outline,
-  .auth-button-focus,
-  .auth-input-focus,
-  .auth-checkbox-focus,
-  .auth-tab-focus,
-  .auth-link-focus {
-    transition: none;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-/* Enhanced visibility for keyboard users */
-.keyboard-user .auth-focus-outline:focus,
-.keyboard-user .auth-button-focus:focus,
-.keyboard-user .auth-tab-focus:focus,
-.keyboard-user .auth-link-focus:focus {
-  @apply ring-4 ring-offset-2;
+/* Color scheme preferences */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --hc-background: #000000;
+    --hc-surface: #1A1A1A;
+    --hc-primary: #FFFFFF;
+    --hc-text: #FFFFFF;
+    --hc-border: #FFFFFF;
+    --hc-accent: #66B3FF;
+  }
 }
 
-/* Ensure interactive elements are large enough for touch */
-.touch-target {
-  min-height: 44px;
-  min-width: 44px;
+@media (prefers-color-scheme: light) {
+  :root {
+    --hc-background: #FFFFFF;
+    --hc-surface: #F8F9FA;
+    --hc-primary: #000000;
+    --hc-text: #000000;
+    --hc-border: #000000;
+    --hc-accent: #0066CC;
+  }
 }
 
-/* Improve text readability */
-.auth-text-readable {
-  line-height: 1.5;
-  letter-spacing: 0.025em;
+/* Contrast preferences */
+@media (prefers-contrast: high) {
+  :root {
+    --wiggle-pink: var(--hc-accent);
+    --wiggle-purple: var(--hc-primary);
+    --wiggle-blue: var(--hc-accent);
+    --wiggle-green: #006600;
+    --wiggle-yellow: #CC6600;
+  }
+  
+  * {
+    border-width: 2px !important;
+  }
+  
+  button, .interactive-element {
+    border-width: 3px !important;
+  }
 }
 
-/* Enhanced error message styling */
-.auth-error-message {
-  @apply flex items-center gap-2 text-sm font-medium;
-  @apply text-red-700 bg-red-50 px-3 py-2 rounded-lg border border-red-200;
+/* Focus management utilities */
+.focus-trap {
+  /* Container for focus trapping */
+}
+
+.focus-trap:focus-within {
+  outline: 2px solid var(--hc-accent, #0066CC);
+  outline-offset: 2px;
+}
+
+/* Skip links for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--hc-accent, #0066CC);
+  color: var(--hc-background, white);
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  top: 6px;
 }
 
 /* Live region for screen reader announcements */
-.auth-live-region {
+.live-region {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Error and validation states */
+.error-state {
+  border-color: var(--hc-error, #CC0000) !important;
+  background-color: rgba(204, 0, 0, 0.1) !important;
+}
+
+.success-state {
+  border-color: var(--hc-success, #006600) !important;
+  background-color: rgba(0, 102, 0, 0.1) !important;
+}
+
+.warning-state {
+  border-color: var(--hc-warning, #CC6600) !important;
+  background-color: rgba(204, 102, 0, 0.1) !important;
+}
+
+/* Loading states with accessibility considerations */
+.loading-accessible {
+  position: relative;
+}
+
+.loading-accessible::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid transparent;
+  border-top: 2px solid var(--hc-accent, #0066CC);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.reduced-motion .loading-accessible::after {
+  animation: none;
+  content: '⏳';
+  border: none;
+  width: auto;
+  height: auto;
+  margin: -10px 0 0 -10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Utility classes for common accessibility patterns */
+.visually-hidden {
   @apply sr-only;
 }
 
-[aria-live="polite"] {
-  @apply sr-only;
+.keyboard-only {
+  opacity: 0;
+  pointer-events: none;
 }
 
-[aria-live="assertive"] {
-  @apply sr-only;
+.keyboard-only:focus-within {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.touch-friendly {
+  @apply child-touch-target;
+}
+
+.extra-touch-friendly {
+  @apply xl-touch-target;
+}
+
+/* Component-specific accessibility enhancements */
+.dashboard-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+@media (max-width: 480px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.carousel-accessible {
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+}
+
+.carousel-accessible > * {
+  scroll-snap-align: start;
+}
+
+.reduced-motion .carousel-accessible {
+  scroll-behavior: auto;
+}
+
+/* Modal and overlay accessibility */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.high-contrast .modal-overlay {
+  background: var(--hc-background);
+  border: 3px solid var(--hc-border);
+}
+
+.modal-content {
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  margin: 5vh auto;
+  padding: 20px;
+  background: var(--hc-surface, white);
+  border-radius: 12px;
+  max-width: 90vw;
+}
+
+/* Ensure proper color contrast in all modes */
+.contrast-safe {
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+}
+
+.high-contrast .contrast-safe {
+  background-color: var(--hc-surface);
+  color: var(--hc-text);
+  border-color: var(--hc-border);
 }

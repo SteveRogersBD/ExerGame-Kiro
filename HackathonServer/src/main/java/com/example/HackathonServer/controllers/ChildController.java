@@ -24,10 +24,18 @@ public class ChildController {
     @Autowired
     private ParentRepo parentRepo;
     
-
+    //    children of a single parent
     @GetMapping
     public ResponseEntity<List<Child>> getAllChildren(@PathVariable Long parentId) {
         return ResponseEntity.ok(childRepo.findByParentId(parentId));
+    }
+
+    //total play time in a week of a child
+    @GetMapping("/{childId}")
+    public ResponseEntity<Integer> getTotalPlayTime(@PathVariable Long parentId,
+                                                 @PathVariable Long childId)
+    {
+
     }
 
     @GetMapping("/{id}")

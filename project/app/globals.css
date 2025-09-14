@@ -175,6 +175,16 @@ input, textarea, [contenteditable] {
     justify-content: center;
     padding: 8px 12px;
   }
+  
+  /* Hide scrollbars for carousel */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @keyframes wiggle {

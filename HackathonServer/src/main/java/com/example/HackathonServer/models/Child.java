@@ -42,6 +42,7 @@ public class Child {
     @JsonIgnore
     private List<Homework> homeworks;
     private LocalDateTime createdAt;
+    private String status;
     
     @PrePersist
     protected void onCreate() {

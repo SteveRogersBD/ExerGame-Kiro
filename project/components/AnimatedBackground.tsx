@@ -2,139 +2,140 @@
 
 import { motion } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useState, useEffect } from 'react';
+
+type Theme = 'sky' | 'forest' | 'space';
+
+interface ThemeConfig {
+  gradient: string;
+  elements: {
+    emoji: string;
+    count: number;
+    size: string;
+    opacity: string;
+  }[];
+}
+
+const themes: Record<Theme, ThemeConfig> = {
+  sky: {
+    gradient: 'bg-gradient-to-b from-blue-300 via-blue-200 to-blue-100',
+    elements: [
+      { emoji: '☁️', count: 6, size: 'text-6xl', opacity: 'opacity-30' },
+      { emoji: '🌤️', count: 2, size: 'text-5xl', opacity: 'opacity-40' },
+      { emoji: '🎈', count: 3, size: 'text-4xl', opacity: 'opacity-35' },
+      { emoji: '🕊️', count: 2, size: 'text-3xl', opacity: 'opacity-25' },
+    ]
+  },
+  forest: {
+    gradient: 'bg-gradient-to-b from-green-300 via-green-200 to-green-100',
+    elements: [
+      { emoji: '🌳', count: 4, size: 'text-6xl', opacity: 'opacity-20' },
+      { emoji: '🦋', count: 5, size: 'text-3xl', opacity: 'opacity-40' },
+      { emoji: '🌸', count: 6, size: 'text-2xl', opacity: 'opacity-35' },
+      { emoji: '🐝', count: 3, size: 'text-2xl', opacity: 'opacity-30' },
+    ]
+  },
+  space: {
+    gradient: 'bg-gradient-to-b from-purple-400 via-purple-300 to-indigo-300',
+    elements: [
+      { emoji: '⭐', count: 8, size: 'text-3xl', opacity: 'opacity-40' },
+      { emoji: '🌟', count: 4, size: 'text-4xl', opacity: 'opacity-35' },
+      { emoji: '🚀', count: 2, size: 'text-5xl', opacity: 'opacity-30' },
+      { emoji: '🌙', count: 1, size: 'text-6xl', opacity: 'opacity-25' },
+    ]
+  }
+};
 
 export default function AnimatedBackground() {
   const prefersReducedMotion = useReducedMotion();
+  const [currentTheme, setCurrentTheme] = useState<Theme>('sky');
+
+  // Theme rotation logic - change theme every 30 seconds
+  useEffect(() => {
+    const themeKeys = Object.keys(themes) as Theme[];
+    let currentIndex = 0;
+
+    const rotateTheme = () => {
+      currentIndex = (currentIndex + 1) % themeKeys.length;
+      setCurrentTheme(themeKeys[currentIndex]);
+    };
+
+    const interval = setInterval(rotateTheme, 30000); // 30 seconds
+    return () => clearInterval(interval);
+  }, []);
+
+  const theme = themes[currentTheme];
 
   // If user prefers reduced motion, render a static background
   if (prefersReducedMotion) {
     return (
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      <div className={`fixed inset-0 overflow-hidden pointer-events-none z-0 ${theme.gradient}`}>
         {/* Static decorative elements */}
-        {[...Array(3)].map((_, i) => (
-          <div
-            key={`static-cloud-${i}`}
-            className="absolute text-4xl opacity-10"
-            style={{
-              left: `${20 + i * 30}%`,
-              top: `${20 + i * 20}%`,
-            }}
-          >
-            ☁️
-          </div>
-        ))}
-        {[...Array(2)].map((_, i) => (
-          <div
-            key={`static-balloon-${i}`}
-            className="absolute text-3xl opacity-15"
-            style={{
-              left: `${30 + i * 40}%`,
-              top: `${60 + i * 15}%`,
-            }}
-          >
-            🎈
-          </div>
-        ))}
-        {[...Array(4)].map((_, i) => (
-          <div
-            key={`static-star-${i}`}
-            className="absolute text-xl opacity-20"
-            style={{
-              left: `${15 + i * 25}%`,
-              top: `${10 + i * 25}%`,
-            }}
-          >
-            ⭐
-          </div>
-        ))}
+        {theme.elements.map((element, elementIndex) =>
+          [...Array(Math.min(element.count, 3))].map((_, i) => (
+            <div
+              key={`static-${elementIndex}-${i}`}
+              className={`absolute ${element.size} ${element.opacity}`}
+              style={{
+                left: `${20 + i * 30}%`,
+                top: `${20 + i * 20}%`,
+              }}
+            >
+              {element.emoji}
+            </div>
+          ))
+        )}
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-      {/* Floating Clouds */}
-      {[...Array(5)].map((_, i) => (
-        <motion.div
-          key={`cloud-${i}`}
-          className="absolute text-6xl opacity-20"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-          }}
-          animate={{
-            transform: [
-              'translateX(0px) translateY(0px)',
-              'translateX(20px) translateY(-15px)',
-              'translateX(0px) translateY(0px)'
-            ]
-          }}
-          transition={{
-            duration: 8 + Math.random() * 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: Math.random() * 2,
-          }}
-        >
-          ☁️
-        </motion.div>
-      ))}
+    <motion.div 
+      key={currentTheme}
+      className={`fixed inset-0 overflow-hidden pointer-events-none z-0 ${theme.gradient}`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 2 }}
+    >
+      {/* Animated theme elements */}
+      {theme.elements.map((element, elementIndex) =>
+        [...Array(element.count)].map((_, i) => (
+          <motion.div
+            key={`${currentTheme}-${elementIndex}-${i}`}
+            className={`absolute ${element.size} ${element.opacity}`}
+            style={{
+              left: `${Math.random() * 90 + 5}%`,
+              top: `${Math.random() * 90 + 5}%`,
+            }}
+            animate={{
+              transform: [
+                'translateX(0px) translateY(0px) rotate(0deg)',
+                `translateX(${(Math.random() - 0.5) * 40}px) translateY(${(Math.random() - 0.5) * 30}px) rotate(${(Math.random() - 0.5) * 20}deg)`,
+                'translateX(0px) translateY(0px) rotate(0deg)'
+              ],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 8 + Math.random() * 6,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: Math.random() * 4,
+            }}
+          >
+            {element.emoji}
+          </motion.div>
+        ))
+      )}
 
-      {/* Floating Balloons */}
-      {[...Array(4)].map((_, i) => (
-        <motion.div
-          key={`balloon-${i}`}
-          className="absolute text-4xl opacity-30"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-          }}
-          animate={{
-            transform: [
-              'translateY(0px) rotate(0deg)',
-              'translateY(-30px) rotate(5deg)',
-              'translateY(0px) rotate(-5deg)',
-              'translateY(0px) rotate(0deg)'
-            ]
-          }}
-          transition={{
-            duration: 6 + Math.random() * 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: Math.random() * 3,
-          }}
-        >
-          🎈
-        </motion.div>
-      ))}
-
-      {/* Floating Stars */}
-      {[...Array(8)].map((_, i) => (
-        <motion.div
-          key={`star-${i}`}
-          className="absolute text-2xl opacity-25"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-          }}
-          animate={{
-            transform: [
-              'scale(1) rotate(0deg)',
-              'scale(1.2) rotate(180deg)',
-              'scale(1) rotate(360deg)'
-            ],
-            opacity: [0.25, 0.5, 0.25],
-          }}
-          transition={{
-            duration: 4 + Math.random() * 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: Math.random() * 4,
-          }}
-        >
-          ⭐
-        </motion.div>
-      ))}
-    </div>
+      {/* Theme transition indicator */}
+      <motion.div
+        className="absolute bottom-4 right-4 text-xs opacity-20 font-medium"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 0.2, y: 0 }}
+        transition={{ delay: 1 }}
+      >
+        {currentTheme} theme
+      </motion.div>
+    </motion.div>
   );
 }

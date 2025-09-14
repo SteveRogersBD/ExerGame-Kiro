@@ -1,7 +1,13 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Player } from '@lottiefiles/react-lottie-player';
+import dynamic from 'next/dynamic';
+
+// Dynamically import Lottie Player to avoid SSR issues
+const Player = dynamic(
+  () => import('@lottiefiles/react-lottie-player').then((mod) => mod.Player),
+  { ssr: false }
+);
 
 interface HeroSectionProps {
   onPlayNow: () => void;

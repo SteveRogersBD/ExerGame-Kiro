@@ -213,7 +213,6 @@ function ForgotPasswordModalComponent({
             noValidate
           >
             <TextField
-              ref={emailInputRef}
               label="Email Address"
               type="email"
               placeholder="Enter your email address"
@@ -221,7 +220,15 @@ function ForgotPasswordModalComponent({
               error={errors.email?.message}
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? 'email-error' : 'forgot-password-description'}
-              {...register('email')}
+              {...register('email', {
+                setValueAs: (value) => {
+                  // Set the ref when the value changes
+                  if (emailInputRef.current) {
+                    emailInputRef.current.value = value;
+                  }
+                  return value;
+                }
+              })}
             />
 
             {/* Action Buttons */}

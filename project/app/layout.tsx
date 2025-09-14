@@ -1,4 +1,5 @@
 import './globals.css';
+import '../styles/accessibility.css';
 import type { Metadata } from 'next';
 import { Fredoka } from 'next/font/google';
 

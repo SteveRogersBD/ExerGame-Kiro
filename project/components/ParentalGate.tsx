@@ -3,7 +3,13 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, Calculator, Key, Mail } from 'lucide-react';
-import { Player } from '@lottiefiles/react-lottie-player';
+import dynamic from 'next/dynamic';
+
+// Dynamically import Lottie Player to avoid SSR issues
+const Player = dynamic(
+  () => import('@lottiefiles/react-lottie-player').then((mod) => mod.Player),
+  { ssr: false }
+);
 import { useRouter } from 'next/navigation';
 
 interface ParentalGateProps {
@@ -47,6 +53,10 @@ export default function ParentalGate({ isOpen, onClose }: ParentalGateProps) {
   };
   const router = useRouter();
   const handleClose = () => {
+    // Set verification flag for route protection
+    if (showSuccess) {
+      sessionStorage.setItem('parentalGateVerified', 'true');
+    }
     resetModal();
     onClose();              // still closes the modal
     router.push("/play");   // change "/play" to your desired route
