@@ -2,14 +2,11 @@ import React, { forwardRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Eye, EyeOff } from 'lucide-react';
 
-interface PasswordFieldProps {
+interface PasswordFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   placeholder?: string;
   error?: string;
   required?: boolean;
-  value?: string;
-  onChange?: (value: string) => void;
-  onBlur?: () => void;
   showStrengthMeter?: boolean;
   'aria-invalid'?: boolean;
   className?: string;
@@ -60,7 +57,7 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
             type={showPassword ? 'text' : 'password'}
             placeholder={placeholder}
             value={value}
-            onChange={(e) => onChange?.(e.target.value)}
+            onChange={onChange}
             onBlur={onBlur}
             required={required}
             aria-invalid={ariaInvalid || !!error}
@@ -69,13 +66,13 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
               // Base input styling
               'w-full px-4 py-3 pr-12 rounded-xl border-2 transition-all duration-200',
               'font-medium text-gray-900 placeholder-gray-400',
-              'bg-white',
-              // Focus styles with wiggle theme colors
+              'bg-white touch-target',
+              // Enhanced focus styles with high contrast
               'focus:outline-none focus:ring-0',
-              // Default border
-              !error && 'border-gray-200 focus:border-pink-400 focus:shadow-[0_0_0_3px_rgba(255,109,213,0.1)]',
-              // Error state
-              error && 'border-red-400 focus:border-red-500 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.1)]',
+              // Default border with enhanced focus
+              !error && 'border-gray-200 auth-input-focus hover:border-gray-300',
+              // Error state with enhanced focus
+              error && 'border-red-400 auth-input-error-focus',
               // Hover state
               'hover:border-gray-300'
             )}
@@ -88,9 +85,9 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
             onClick={togglePasswordVisibility}
             className={cn(
               'absolute right-3 top-1/2 -translate-y-1/2',
-              'p-1 rounded-lg transition-colors duration-200',
+              'p-1 rounded-lg transition-colors duration-200 touch-target',
               'text-gray-400 hover:text-gray-600 focus:text-gray-600',
-              'focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-1'
+              'auth-focus-outline auth-focus-pink'
             )}
             aria-label={showPassword ? 'Hide password' : 'Show password'}
             aria-pressed={showPassword}
@@ -107,13 +104,15 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
         {error && (
           <p
             id={errorId}
-            className="text-sm text-red-600 flex items-center gap-1"
+            className="auth-error-text auth-text-readable flex items-center gap-2 text-sm font-medium"
             role="alert"
+            aria-live="polite"
           >
             <svg
               className="w-4 h-4 flex-shrink-0"
               fill="currentColor"
               viewBox="0 0 20 20"
+              aria-hidden="true"
             >
               <path
                 fillRule="evenodd"

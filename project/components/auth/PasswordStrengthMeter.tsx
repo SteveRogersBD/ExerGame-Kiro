@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useMemo, memo } from 'react';
 import { cn } from '@/lib/utils';
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface PasswordStrengthMeterProps {
   password: string;
@@ -103,8 +104,16 @@ const strengthConfig = {
   }
 };
 
-export function PasswordStrengthMeter({ password, className }: PasswordStrengthMeterProps) {
-  const { strength, feedback } = calculatePasswordStrength(password);
+function PasswordStrengthMeterComponent({ password, className }: PasswordStrengthMeterProps) {
+  // Debounce password input to avoid excessive calculations
+  const debouncedPassword = useDebounce(password, 300);
+  
+  // Memoize strength calculation to prevent unnecessary recalculations
+  const { strength, feedback } = useMemo(() => 
+    calculatePasswordStrength(debouncedPassword), 
+    [debouncedPassword]
+  );
+  
   const config = strengthConfig[strength];
 
   // Don't show meter if no password
@@ -163,3 +172,6 @@ export function PasswordStrengthMeter({ password, className }: PasswordStrengthM
     </div>
   );
 }
+
+// Memoize the component to prevent unnecessary re-renders
+export const PasswordStrengthMeter = memo(PasswordStrengthMeterComponent);

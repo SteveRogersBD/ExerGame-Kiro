@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, Calculator, Key, Mail } from 'lucide-react';
 import { Player } from '@lottiefiles/react-lottie-player';
+import { useRouter } from 'next/navigation';
 
 interface ParentalGateProps {
   isOpen: boolean;
@@ -44,11 +45,12 @@ export default function ParentalGate({ isOpen, onClose }: ParentalGateProps) {
     setEmail('');
     setShowSuccess(false);
   };
-
+  const router = useRouter();
   const handleClose = () => {
     resetModal();
-    onClose();
-  };
+    onClose();              // still closes the modal
+    router.push("/play");   // change "/play" to your desired route
+};
 
   if (!isOpen) return null;
 
@@ -78,7 +80,7 @@ export default function ParentalGate({ isOpen, onClose }: ParentalGateProps) {
         >
           <X size={24} />
         </button>
-
+{/* if the methods are successful, show this part */}
         {showSuccess ? (
           <motion.div
             initial={{ scale: 0 }}

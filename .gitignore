@@ -48,13 +48,14 @@ Thumbs.db
 .env.*
 .env
 # firebase / api keys
-Backend (Java)\ImageService\src\main\resources\application.yaml
-Backend (Java)\ImageService\atomica-cbcd3-firebase-adminsdk-ca3ot-60097558fe.json
+Backend (Java)/ImageService/src/main/resources/application.yaml
+Backend (Java)/ImageService/atomica-cbcd3-firebase-adminsdk-ca3ot-60097558fe.json
 
 Backend (Java)/ImageService/atomica-*-firebase-adminsdk-*.json
 Backend (Java)/ImageService/src/main/resources/application.yaml
 Backend (Java)/ImageService/src/main/resources/secrets.properties
 Backend (Java)/UserService/src/main/resources/application.yaml
+HackathonServer/src/main/resources/application.properties
 
 ############################
 # Others
@@ -63,3 +64,4 @@ Backend (Java)/UserService/src/main/resources/application.yaml
 *~
 *.swp
 /project/node_modules/
+project/.bolt

@@ -1,0 +1,187 @@
+﻿👨 Parent API
+Base URL: http://localhost:8080/parent
+ Auth: none (for now; add JWT later if needed)
+Content-Type: application/json
+________________
+
+
+📌 Model: Parent
+{
+  "id": 1,
+  "fullName": "John Doe",
+  "username": "johndoe",
+  "email": "john@example.com",
+  "password": "secret123",
+  "dp": "https://cdn.app/avatar.png",
+  "createdAt": "2025-09-13T20:12:00",
+  "children": [],
+  "homeworks": []
+}
+
+
+________________
+
+
+🔹 Endpoints
+1. GET /parent
+Get a list of all parents.
+Response 200
+[
+  {
+    "id": 1,
+    "fullName": "John Doe",
+    "username": "johndoe",
+    "email": "john@example.com",
+    "password": "secret123",
+    "dp": null,
+    "createdAt": "2025-09-13T20:12:00",
+    "children": [],
+    "homeworks": []
+  }
+]
+
+
+________________
+
+
+2. GET /parent/{id}
+Get a parent by ID.
+Path Params
+* id (Long, required): Parent ID.
+
+Response 200
+{
+  "id": 1,
+  "fullName": "John Doe",
+  "username": "johndoe",
+  "email": "john@example.com",
+  "password": "secret123",
+  "dp": null,
+  "createdAt": "2025-09-13T20:12:00",
+  "children": [],
+  "homeworks": []
+}
+
+
+Response 404
+{ "error": "Parent not found" }
+
+
+________________
+
+
+3. POST /parent
+Create a new parent.
+Request Body
+{
+  "fullName": "Jane Smith",
+  "username": "janesmith",
+  "email": "jane@example.com",
+  "password": "mypassword",
+  "dp": "https://cdn.app/jane.png"
+}
+
+
+Response 200
+{
+  "id": 2,
+  "fullName": "Jane Smith",
+  "username": "janesmith",
+  "email": "jane@example.com",
+  "password": "mypassword",
+  "dp": "https://cdn.app/jane.png",
+  "createdAt": "2025-09-13T20:15:00",
+  "children": [],
+  "homeworks": []
+}
+
+
+Response 400
+{ "error": "Invalid request body" }
+
+
+________________
+
+
+4. PUT /parent/{id}
+Update an existing parent.
+Path Params
+   * id (Long, required): Parent ID.
+
+Request Body
+{
+  "id": 1,
+  "fullName": "John Updated",
+  "username": "johnny",
+  "email": "johnny@example.com",
+  "password": "newpass123",
+  "dp": "https://cdn.app/johnny.png"
+}
+
+
+Response 200
+{
+  "id": 1,
+  "fullName": "John Updated",
+  "username": "johnny",
+  "email": "johnny@example.com",
+  "password": "newpass123",
+  "dp": "https://cdn.app/johnny.png",
+  "createdAt": "2025-09-13T20:12:00",
+  "children": [],
+  "homeworks": []
+}
+
+
+Response 404
+{ "error": "Parent not found" }
+
+
+________________
+
+
+5. DELETE /parent/{id}
+Delete a parent.
+Path Params
+      * id (Long, required): Parent ID.
+
+Response 200
+{}
+
+
+Response 404
+{ "error": "Parent not found" }
+
+
+________________
+
+
+5. POSt /parent/signin
+Sign in a parent.
+Request Body
+{
+  "email": "john@example.com",
+  "password": "secret123"
+}
+
+Response 200
+{
+   "id": 1,
+  "fullName": "John Doe",
+  "username": "johndoe",
+  "email": "john@example.com",
+  "password": "secret123",
+  "dp": "https://cdn.app/avatar.png",
+  "createdAt": "2025-09-13T20:12:00",
+  "children": [],
+  "homeworks": []
+
+
+}
+
+
+Response 404
+{ "error": "Parent not found" }
+
+
+________________

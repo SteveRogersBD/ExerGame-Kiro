@@ -1,0 +1,153 @@
+/**
+ * Enhanced accessibility styles for WiggleWorld authentication
+ * Provides high contrast focus outlines and improved keyboard navigation
+ */
+
+/* High contrast focus outlines for better visibility */
+.auth-focus-outline {
+  @apply focus:outline-none focus:ring-4 focus:ring-offset-2;
+}
+
+.auth-focus-pink {
+  @apply focus:ring-wiggle-pink/60;
+}
+
+.auth-focus-blue {
+  @apply focus:ring-wiggle-blue/60;
+}
+
+.auth-focus-purple {
+  @apply focus:ring-wiggle-purple/60;
+}
+
+.auth-focus-gray {
+  @apply focus:ring-gray-400/60;
+}
+
+/* Enhanced button focus states */
+.auth-button-focus {
+  @apply focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-wiggle-pink/60;
+}
+
+.auth-button-secondary-focus {
+  @apply focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-gray-400/60;
+}
+
+/* Enhanced input focus states */
+.auth-input-focus {
+  @apply focus:outline-none focus:ring-0 focus:border-pink-400 focus:shadow-[0_0_0_3px_rgba(255,109,213,0.2)];
+}
+
+.auth-input-error-focus {
+  @apply focus:border-red-500 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.2)];
+}
+
+/* Enhanced checkbox focus states */
+.auth-checkbox-focus {
+  @apply focus-within:ring-4 focus-within:ring-wiggle-pink/60 focus-within:ring-offset-1;
+}
+
+/* Enhanced tab focus states */
+.auth-tab-focus {
+  @apply focus:outline-none focus:ring-4 focus:ring-wiggle-pink/60 focus:ring-offset-2;
+}
+
+/* Enhanced link focus states */
+.auth-link-focus {
+  @apply focus:outline-none focus:ring-4 focus:ring-wiggle-pink/60 focus:ring-offset-1 rounded-sm;
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+  @apply absolute -top-10 left-4 z-[9999] px-4 py-2 bg-wiggle-pink text-white font-semibold rounded-md;
+  @apply focus:top-4 focus:outline-none focus:ring-4 focus:ring-white/60 focus:ring-offset-2;
+  @apply transition-all duration-200;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Ensure sufficient color contrast for error states */
+.auth-error-text {
+  @apply text-red-700;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .auth-focus-outline {
+    @apply focus:ring-8 focus:ring-offset-4;
+  }
+  
+  .auth-button-focus {
+    @apply focus:ring-8 focus:ring-offset-4;
+  }
+  
+  .auth-input-focus {
+    @apply focus:shadow-[0_0_0_6px_rgba(255,109,213,0.4)];
+  }
+  
+  .auth-error-text {
+    @apply text-red-800;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .auth-focus-outline,
+  .auth-button-focus,
+  .auth-input-focus,
+  .auth-checkbox-focus,
+  .auth-tab-focus,
+  .auth-link-focus {
+    transition: none;
+  }
+}
+
+/* Enhanced visibility for keyboard users */
+.keyboard-user .auth-focus-outline:focus,
+.keyboard-user .auth-button-focus:focus,
+.keyboard-user .auth-tab-focus:focus,
+.keyboard-user .auth-link-focus:focus {
+  @apply ring-4 ring-offset-2;
+}
+
+/* Ensure interactive elements are large enough for touch */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Improve text readability */
+.auth-text-readable {
+  line-height: 1.5;
+  letter-spacing: 0.025em;
+}
+
+/* Enhanced error message styling */
+.auth-error-message {
+  @apply flex items-center gap-2 text-sm font-medium;
+  @apply text-red-700 bg-red-50 px-3 py-2 rounded-lg border border-red-200;
+}
+
+/* Live region for screen reader announcements */
+.auth-live-region {
+  @apply sr-only;
+}
+
+[aria-live="polite"] {
+  @apply sr-only;
+}
+
+[aria-live="assertive"] {
+  @apply sr-only;
+}

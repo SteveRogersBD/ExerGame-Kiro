@@ -161,16 +161,3 @@
   - Create loading states for data fetching
   - _Requirements: 9.5_
   
-- [ ] 14. Integrate dashboard with authentication flow
-  - Connect parent auth page to redirect to dashboard on successful login
-  - Implement authentication state management
-  - Add logout functionality from dashboard
-  - _Requirements: 1.1_
-
-
-- [ ] 15. Create activity and progress tracking page
-  - Build activity & progress page accessible from child cards
-  - Implement performance stats display for 7 and 30 day periods
-  - Create components for play time, moves by type, accuracy, and streak data
-  - Add quiz scores and completion rates display
-  - _Requirements: 3.1, 3.2, 3.3, 3.4_

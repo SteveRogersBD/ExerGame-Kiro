@@ -1,8 +1,56 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 export default function AnimatedBackground() {
+  const prefersReducedMotion = useReducedMotion();
+
+  // If user prefers reduced motion, render a static background
+  if (prefersReducedMotion) {
+    return (
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        {/* Static decorative elements */}
+        {[...Array(3)].map((_, i) => (
+          <div
+            key={`static-cloud-${i}`}
+            className="absolute text-4xl opacity-10"
+            style={{
+              left: `${20 + i * 30}%`,
+              top: `${20 + i * 20}%`,
+            }}
+          >
+            ☁️
+          </div>
+        ))}
+        {[...Array(2)].map((_, i) => (
+          <div
+            key={`static-balloon-${i}`}
+            className="absolute text-3xl opacity-15"
+            style={{
+              left: `${30 + i * 40}%`,
+              top: `${60 + i * 15}%`,
+            }}
+          >
+            🎈
+          </div>
+        ))}
+        {[...Array(4)].map((_, i) => (
+          <div
+            key={`static-star-${i}`}
+            className="absolute text-xl opacity-20"
+            style={{
+              left: `${15 + i * 25}%`,
+              top: `${10 + i * 25}%`,
+            }}
+          >
+            ⭐
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
       {/* Floating Clouds */}
