@@ -7,8 +7,6 @@
 [![Platform](https://img.shields.io/badge/Platform-Web-blue.svg)](#)
 [![Frontend](https://img.shields.io/badge/Frontend-React%20%7C%20TypeScript-ff69b4.svg)](#)
 [![Backend](https://img.shields.io/badge/Backend-Spring%20Boot%20%7C%20WebSockets-orange.svg)](#)
-[![CI/CD](https://img.shields.io/badge/CI%2FCD-Docker%20%7C%20K8s%20%7C%20GitHub%20Actions-black.svg)](#)
-[![Version](https://img.shields.io/badge/Version-1.0.0-yellow.svg)](#)
 
 *A collaborative trip-planning platform where friends create shared itineraries, pin places on interactive maps, split expenses, and keep all travel details organized in one place.*
 
