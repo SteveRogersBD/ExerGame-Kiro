@@ -61,10 +61,8 @@ Step 2) run the front end (it will run on **port 3000**)
 ```bash
 npm run dev
 ```
-Step 3) run the backend (make sure to run **Docker Desktop** before this command)
-```bash
-docker compose up
-```
+Step 3) run the backend. Run HackathonServer/src/main/java/com/example/HackathonServer/HackathonServerApplication.java.
+---
 ## Architecture Overview
 
 **High-Level Flow:**
