@@ -4,11 +4,22 @@ import { ApiError, HOMEWORK_STATUS_MAP, HomeworkStatusKey } from './types';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
 
 // Types based on OpenAPI schema
+export interface Question {
+  id: number;
+  question: string;
+  optA: string;
+  optB: string;
+  optC: string;
+  timeToStop: number; // timestamp in seconds when to pause video
+  correctAnswer?: string; // A, B, or C
+}
+
 export interface Video {
   id: number;
   title: string;
   url: string;
   createdAt: string;
+  questions?: Question[]; // Array of questions with timestamps
 }
 
 export interface Homework {

@@ -3,6 +3,8 @@
  * Ensures keyboard navigation stays within modal boundaries
  */
 
+import * as React from 'react';
+
 export interface FocusTrapOptions {
   initialFocus?: HTMLElement | null;
   fallbackFocus?: HTMLElement | null;
