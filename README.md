@@ -127,7 +127,7 @@ Project layout (recommended):
 
 ## 📖 API Documentation
 
-* Placeholder OpenAPI spec: \[`/docs/openapi.yaml`] 
+* Placeholder OpenAPI spec: \[`project/docs/apis/exergame-openapi.yaml`] 
 ---
 
 ## 🗄️ Database Schema / ER Diagram
