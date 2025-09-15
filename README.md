@@ -1,5 +1,6 @@
 <div align="center">
 
+![Alt text](smilling_mascot.png)
 # WiggleWorld
 
 ### **Turning screen time into active playtime.**
