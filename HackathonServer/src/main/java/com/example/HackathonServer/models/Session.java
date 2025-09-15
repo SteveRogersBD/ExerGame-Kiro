@@ -1,12 +1,14 @@
 package com.example.HackathonServer.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,10 +19,29 @@ public class Session {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String description;
-    private String videoUrl;
-    private String thumbnailUrl;
+    @ManyToOne
+    @JoinColumn(name = "child_id", nullable = false)
+    @JsonBackReference(value = "child-session")
+    private Child child;
+    @OneToOne
+    @JoinColumn(name = "video_id", nullable = false)
+    @JsonBackReference(value = "video-session")
+    private Video video;
+    private String status;
+    private LocalDateTime createdAt;
+    private LocalDateTime endedAt;
+    private String duration;
+    @OneToOne
+    @JoinColumn(name = "score_id", nullable = false)
+    @JsonManagedReference(value = "session-score")
+    private Score score;
+
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "session-move")
+    private List<Move> moves;
+
+
+
 
 
 }

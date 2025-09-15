@@ -1,9 +1,13 @@
 package com.example.HackathonServer.controllers;
 
 import com.example.HackathonServer.models.Child;
+import com.example.HackathonServer.models.Move;
 import com.example.HackathonServer.models.Parent;
+import com.example.HackathonServer.models.Session;
 import com.example.HackathonServer.repos.ChildRepo;
+import com.example.HackathonServer.repos.MoveRepo;
 import com.example.HackathonServer.repos.ParentRepo;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +16,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -23,7 +31,9 @@ public class ChildController {
     private ChildRepo childRepo;
     @Autowired
     private ParentRepo parentRepo;
-    
+    @Autowired
+    private MoveRepo moveRepo;
+
 
     @GetMapping
     public ResponseEntity<List<Child>> getAllChildren(@PathVariable Long parentId) {
@@ -47,6 +57,7 @@ public class ChildController {
         private String fullName;
         private LocalDate dateOfBirth;
     }
+
 
     @PostMapping
     public ResponseEntity<Child> createChild(@PathVariable Long parentId, 
@@ -85,4 +96,30 @@ public class ChildController {
         childRepo.delete(child.get());
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{id}/moves/last-week")
+    public ResponseEntity<List<Move>> getLastWeekMoves(@PathVariable Long parentId, @PathVariable Long id) {
+        Optional<Child> child = childRepo.findByIdAndParentId(id, parentId);
+        if (child.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        LocalDateTime weekAgo = LocalDateTime.now().minusDays(7);
+        List<Move> moves = moveRepo.findByChildIdAndCreatedAtAfter(id, weekAgo);
+        return ResponseEntity.ok(moves);
+    }
+
+    @GetMapping("/{id}/moves/last-month")
+    public ResponseEntity<List<Move>> getLastMonthMoves(@PathVariable Long parentId, @PathVariable Long id) {
+        Optional<Child> child = childRepo.findByIdAndParentId(id, parentId);
+        if (child.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        LocalDateTime monthAgo = LocalDateTime.now().minusDays(30);
+        List<Move> moves = moveRepo.findByChildIdAndCreatedAtAfter(id, monthAgo);
+        return ResponseEntity.ok(moves);
+    }
+
+
+
+
 }

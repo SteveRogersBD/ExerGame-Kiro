@@ -42,7 +42,12 @@ public class Child {
     @JsonIgnore
     private List<Homework> homeworks;
     private LocalDateTime createdAt;
-    
+
+    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "child-session")
+    @JsonIgnore
+    private List<Session> sessions;
+    private String pin;
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();

@@ -1,11 +1,17 @@
 package com.example.HackathonServer.controllers;
 
+import com.example.HackathonServer.models.Child;
 import com.example.HackathonServer.models.Session;
+import com.example.HackathonServer.repos.ChildRepo;
 import com.example.HackathonServer.repos.SessionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -14,6 +20,8 @@ public class SessionController {
 
     @Autowired
     private SessionRepo sessionRepo;
+    @Autowired
+    private ChildRepo childRepo;
 
     @GetMapping
     public List<Session> getAllSessions() {
@@ -47,5 +55,49 @@ public class SessionController {
         sessionRepo.deleteById(id);
         return ResponseEntity.ok().build();
     }
+    
+    @GetMapping("/{childId}/last-week/total-hour")
+    public ResponseEntity<Integer>getTotalHourLastWeek(@PathVariable Long childId)
+    {
+        Child child = childRepo.findById(childId).orElseThrow(()->{
+            return new RuntimeException("Child not found");
+        });
+        List<Session>sessions = child.getSessions();
+        int total = 0;
+        LocalDateTime sevenDaysAgo = LocalDateTime.now().minus(7, ChronoUnit.DAYS);
+        for(Session session:sessions)
+        {
+            if(session.getCreatedAt().isAfter(sevenDaysAgo)) continue;
+            total += Integer.parseInt(session.getDuration());
+        }
+        return ResponseEntity.ok(total);
+        
+    }
+
+    @GetMapping("/{childId}/last-month/total-hour")
+    public ResponseEntity<Integer> getTotalHourLastMonth(@PathVariable Long childId) {
+        Child child = childRepo.findById(childId).orElseThrow(() -> {
+            return new RuntimeException("Child not found");
+        });
+        List<Session> sessions = child.getSessions();
+        int total = 0;
+        LocalDateTime thirtyDaysAgo = LocalDateTime.now().minus(30, ChronoUnit.DAYS);
+        for (Session session : sessions) {
+            if (session.getCreatedAt().isAfter(thirtyDaysAgo)) continue;
+            total += Integer.parseInt(session.getDuration());
+        }
+        return ResponseEntity.ok(total);
+    }
+
+    @GetMapping("/{childId}/recent")
+    public ResponseEntity<List<Session>> getRecentSessions(@PathVariable Long childId) {
+        Child child = childRepo.findById(childId).orElseThrow(() -> {
+            return new RuntimeException("Child not found");
+        });
+        List<Session> sessions = child.getSessions();
+        Collections.reverse(sessions);
+        return ResponseEntity.ok(sessions);
+    }
+
 
 }

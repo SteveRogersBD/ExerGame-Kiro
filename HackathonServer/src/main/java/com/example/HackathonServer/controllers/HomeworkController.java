@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -39,26 +40,38 @@ public class HomeworkController {
         Long childId;
         Long parentId;
     };
-
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private static class HomeworkDTO{
+        Long id;
+        String title;
+        String url;
+        Long videoId;
+        String status;
+    };
+    
     @GetMapping
-    public List<Homework> getAllHomework() {
-        return homeworkRepo.findAll();
+    public List<HomeworkDTO> getAllHomework() {
+        return homeworkRepo.findAll().stream()
+                .map(hw -> new HomeworkDTO(hw.getId(), hw.getTitle(),
+                        hw.getVideo().getUrl(), hw.getVideo().getId(), hw.getStatus()))
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Homework> getHomeworkById(@PathVariable Long id) {
+    public ResponseEntity<HomeworkDTO> getHomeworkById(@PathVariable Long id) {
         return homeworkRepo.findById(id)
-                .map(ResponseEntity::ok)
+                .map(hw -> ResponseEntity.ok(new HomeworkDTO(hw.getId(), hw.getTitle(), hw.getVideo().getUrl(), hw.getVideo().getId(), hw.getStatus())))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Homework> createHomework(@RequestBody HomeworkRequest hw)
-    {
+    public ResponseEntity<HomeworkDTO> createHomework(@RequestBody HomeworkRequest hw) {
         Parent parent = parentRepo.findById(hw.getParentId()).
-                orElseThrow(()->new RuntimeException("Parent not found"));
+                orElseThrow(() -> new RuntimeException("Parent not found"));
         Child child = childRepo.findById(hw.getChildId()).
-                orElseThrow(()->new RuntimeException("Child not found"));
+                orElseThrow(() -> new RuntimeException("Child not found"));
         Video video = new Video();
         video.setTitle(hw.getTitle());
         video.setUrl(hw.getUrl());
@@ -70,15 +83,16 @@ public class HomeworkController {
         homework.setTitle(hw.getTitle());
         Homework saved = homeworkRepo.save(homework);
         homework.setChild(child);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok(new HomeworkDTO(saved.getId(), saved.getTitle(), saved.getVideo().getUrl(), saved.getVideo().getId(), saved.getStatus()));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Homework> updateHomework(@PathVariable Long id, @RequestBody Homework homework) {
+    public ResponseEntity<HomeworkDTO> updateHomework(@PathVariable Long id, @RequestBody Homework homework) {
         return homeworkRepo.findById(id)
                 .map(existingHomework -> {
                     homework.setId(id);
-                    return ResponseEntity.ok(homeworkRepo.save(homework));
+                    Homework saved = homeworkRepo.save(homework);
+                    return ResponseEntity.ok(new HomeworkDTO(saved.getId(), saved.getTitle(), saved.getVideo().getUrl(), saved.getVideo().getId(), saved.getStatus()));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -92,5 +106,19 @@ public class HomeworkController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/child/{childId}/all")
+    public ResponseEntity<List<HomeworkDTO>> getAllForAChild(@PathVariable Long childId) {
+        Child child = childRepo.findById(childId).orElseThrow(
+                () -> new RuntimeException("Child not found"));
+        List<Homework> homeworks = child.getHomeworks();
+        Collections.reverse(homeworks);
+        List<HomeworkDTO> dtos = homeworks.stream()
+                .map(hw -> new HomeworkDTO(hw.getId(), hw.getTitle(), hw.getVideo().getUrl(), hw.getVideo().getId(), hw.getStatus()))
+                .toList();
+        return ResponseEntity.ok(dtos);
+    }
+    
+    
 
 }

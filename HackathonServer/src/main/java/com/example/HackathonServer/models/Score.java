@@ -1,5 +1,6 @@
 package com.example.HackathonServer.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,17 +16,20 @@ public class Score {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "child_id", nullable = false)
-    private Child child;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "child_id", nullable = false)
+//    private Child child;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "video_id", nullable = false)
-    private Video video;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "video_id", nullable = false)
+//    private Video video;
 
     @Column(nullable = false)
     private Integer score;
 
     @Column(nullable = false)
     private Double percentage;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JsonBackReference(value = "session-score")
+    private Session session;
 }
