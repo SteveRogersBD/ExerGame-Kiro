@@ -27,14 +27,10 @@ WiggleWorld is a kid-friendly **exergame** that blends interactive cartoons with
 ---
 
 ## Features
-- **Interactive Video Gameplay** — pause at key timestamps; detect a move; resume.
-- **Kid-robust Gestures** — jump, squat, clap, raise left/right hand.
-- **One-Shot Demo Flow** — first pause shows **“Jump detected!”**, increments **jump** and **score**, then continues.
-- **Homework Assignments** — parents assign preset videos and questions.
-- **Progress Tracking** — counts for jumps/squats/claps; simple scoring.
-- **Typed APIs** — single source of truth via `exergame-openapi.yaml`.
-
-> Minimal game demo behavior per hackathon scope: after the **first question timestamp**, the video pauses for **5 seconds**, shows **Jump detected!** (updates jump + score), then continues with no further UI changes.
+- ** Play with YouTube videos: Kids watch YouTube videos and also answer the pop-up questions using gestures.
+- ** Parent Control: Parents can create new games with just a video URL.
+- ** Live Session Control: Parents can see if their kids are playing or not. If wanted they can put a lock in real time.
+- ** AI insights: Get AI insights and feedback about your kid. Our integrated Gemini model, with the help of the youtube api fetches the related viedos for the kid.   
 
 ---
 
@@ -142,6 +138,6 @@ We welcome contributions from the community! Here's how you can help:
 **Aniruddha Biswas**
 
 * GitHub: [https://github.com/SteveRogersBD](https://github.com/SteveRogersBD)
-* LinkedIn: [https://linkedin.com/in/your-profile](https://www.linkedin.com/in/aniruddha-biswas-atanu-16b708228)
+* LinkedIn: [https://linkedin.com/in/Aniruddha Biswas Atanu](https://www.linkedin.com/in/aniruddha-biswas-atanu-16b708228)
 * Email: [cd43641@truman.edu](mailto:cd43641@truman.edu)
 </div>
