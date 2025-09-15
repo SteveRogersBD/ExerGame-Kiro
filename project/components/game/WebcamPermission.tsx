@@ -1,6 +1,7 @@
+"use client";
+
 import React, { useState } from 'react';
-import { Camera, Shield, AlertCircle, CheckCircle } from 'lucide-react';
-import { requestWebcamPermission, isWebcamSupported } from '@/lib/utils/webcam';
+import { Camera, Shield, Play } from 'lucide-react';
 
 interface WebcamPermissionProps {
   onPermissionGranted: () => void;
@@ -9,121 +10,108 @@ interface WebcamPermissionProps {
 
 export function WebcamPermission({ onPermissionGranted, onPermissionDenied }: WebcamPermissionProps) {
   const [isRequesting, setIsRequesting] = useState(false);
-  const [showDetails, setShowDetails] = useState(false);
 
-  const handleRequestPermission = async () => {
-    if (!isWebcamSupported()) {
-      onPermissionDenied('Your browser does not support camera access. Please use a modern browser like Chrome, Firefox, or Safari.');
-      return;
-    }
-
+  const requestPermission = async () => {
     setIsRequesting(true);
     
     try {
-      const result = await requestWebcamPermission();
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: true, 
+        audio: false 
+      });
       
-      if (result.granted) {
-        onPermissionGranted();
-      } else {
-        onPermissionDenied(result.error || 'Camera permission denied');
-      }
+      // Stop the stream immediately - we just needed to check permission
+      stream.getTracks().forEach(track => track.stop());
+      
+      onPermissionGranted();
     } catch (error) {
-      onPermissionDenied('Failed to request camera permission');
+      let errorMessage = 'Camera access denied';
+      
+      if (error instanceof Error) {
+        if (error.name === 'NotAllowedError') {
+          errorMessage = 'Camera permission denied. Please allow camera access and refresh the page.';
+        } else if (error.name === 'NotFoundError') {
+          errorMessage = 'No camera found. Please connect a camera and try again.';
+        } else if (error.name === 'NotReadableError') {
+          errorMessage = 'Camera is already in use by another application.';
+        } else {
+          errorMessage = `Camera error: ${error.message}`;
+        }
+      }
+      
+      onPermissionDenied(errorMessage);
     } finally {
       setIsRequesting(false);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] max-w-2xl mx-auto">
-      <div className="rounded-3xl border-4 border-sky-300 bg-white/90 p-8 shadow-xl text-center">
-        {/* Camera Icon */}
-        <div className="mb-6">
-          <div className="relative mx-auto w-24 h-24 rounded-full bg-gradient-to-br from-sky-200 to-purple-200 flex items-center justify-center border-4 border-sky-300">
-            <Camera className="h-12 w-12 text-sky-600" />
-            <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-amber-400 border-2 border-white flex items-center justify-center">
-              <Shield className="h-4 w-4 text-white" />
-            </div>
+    <div className="text-center max-w-2xl mx-auto">
+      <div className="rounded-3xl border-4 border-sky-300 bg-white/90 p-8 shadow-xl">
+        <div className="mb-6 flex justify-center">
+          <div className="relative">
+            <Camera className="h-20 w-20 text-sky-500" />
+            <Shield className="h-8 w-8 text-emerald-500 absolute -top-2 -right-2 bg-white rounded-full p-1" />
           </div>
         </div>
-
-        {/* Title */}
-        <h2 className="text-3xl font-black text-sky-900 mb-4">
-          Camera Permission Needed
-        </h2>
-
-        {/* Description */}
-        <p className="text-xl text-sky-700 font-medium mb-6 leading-relaxed">
-          To play this interactive game, we need access to your camera to detect your hand movements and gestures!
+        
+        <h1 className="mb-4 text-4xl font-black text-sky-900 drop-shadow">
+          Camera Permission Required
+        </h1>
+        
+        <p className="mb-6 text-xl text-sky-700 font-medium">
+          This interactive game uses your camera to detect hand gestures and body movements. 
+          Your camera feed stays on your device and is never recorded or shared.
         </p>
-
-        {/* Features */}
-        <div className="mb-8 space-y-3">
-          <div className="flex items-center justify-center gap-3 text-emerald-700">
-            <CheckCircle className="h-5 w-5 text-emerald-500" />
-            <span className="font-medium">Detect hand gestures</span>
-          </div>
-          <div className="flex items-center justify-center gap-3 text-emerald-700">
-            <CheckCircle className="h-5 w-5 text-emerald-500" />
-            <span className="font-medium">Interactive gameplay</span>
-          </div>
-          <div className="flex items-center justify-center gap-3 text-emerald-700">
-            <CheckCircle className="h-5 w-5 text-emerald-500" />
-            <span className="font-medium">Safe and secure</span>
-          </div>
-        </div>
-
-        {/* Privacy Note */}
-        <div className="mb-6 p-4 rounded-2xl bg-sky-50 border-2 border-sky-200">
-          <div className="flex items-start gap-3">
-            <Shield className="h-5 w-5 text-sky-500 mt-0.5 flex-shrink-0" />
-            <div className="text-left">
-              <p className="text-sm font-semibold text-sky-800 mb-1">Your Privacy is Protected</p>
-              <p className="text-xs text-sky-600">
-                Your camera feed stays on your device and is never recorded or shared. 
-                We only use it to detect gestures for the game.
-              </p>
+        
+        <div className="mb-6 bg-sky-50 rounded-2xl p-6 border-2 border-sky-200">
+          <h3 className="text-lg font-bold text-sky-800 mb-3">What we'll detect:</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div className="text-center">
+              <div className="text-2xl mb-2">🖐️</div>
+              <p className="font-semibold text-sky-700">Hand Raises</p>
+              <p className="text-sky-600">To start the game</p>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl mb-2">🦘</div>
+              <p className="font-semibold text-sky-700">Jumping</p>
+              <p className="text-sky-600">For option A</p>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl mb-2">🏋️</div>
+              <p className="font-semibold text-sky-700">Squatting</p>
+              <p className="text-sky-600">For option B</p>
             </div>
           </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="space-y-4">
-          <button
-            onClick={handleRequestPermission}
-            disabled={isRequesting}
-            className="w-full rounded-3xl bg-gradient-to-r from-emerald-400 to-green-500 px-8 py-4 text-xl font-black text-white shadow-lg hover:from-emerald-500 hover:to-green-600 transform hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-          >
-            {isRequesting ? (
-              <div className="flex items-center justify-center gap-2">
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Requesting Permission...
-              </div>
-            ) : (
-              <>Allow Camera Access 📹</>
-            )}
-          </button>
-
-          <button
-            onClick={() => setShowDetails(!showDetails)}
-            className="text-sky-600 hover:text-sky-800 font-medium text-sm underline"
-          >
-            {showDetails ? 'Hide' : 'Show'} technical details
-          </button>
-        </div>
-
-        {/* Technical Details */}
-        {showDetails && (
-          <div className="mt-6 p-4 rounded-2xl bg-gray-50 border-2 border-gray-200 text-left">
-            <h4 className="font-semibold text-gray-800 mb-2">Technical Information:</h4>
-            <ul className="text-sm text-gray-600 space-y-1">
-              <li>• Camera access is requested via WebRTC API</li>
-              <li>• Video processing happens locally on your device</li>
-              <li>• No data is sent to external servers</li>
-              <li>• You can revoke permission anytime in browser settings</li>
-            </ul>
+          <div className="text-center mt-4">
+            <div className="text-2xl mb-2">👏</div>
+            <p className="font-semibold text-sky-700">Clapping</p>
+            <p className="text-sky-600">For option C</p>
           </div>
-        )}
+        </div>
+        
+        <button
+          onClick={requestPermission}
+          disabled={isRequesting}
+          className="rounded-3xl bg-gradient-to-r from-sky-400 to-emerald-500 px-10 py-4 text-xl font-black text-white shadow-lg hover:from-sky-500 hover:to-emerald-600 transform hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+        >
+          {isRequesting ? (
+            <div className="flex items-center gap-3">
+              <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              Requesting Permission...
+            </div>
+          ) : (
+            <div className="flex items-center gap-3">
+              <Play className="h-6 w-6" />
+              Allow Camera & Start Game
+            </div>
+          )}
+        </button>
+        
+        <div className="mt-4 text-sm text-sky-600 bg-sky-50 rounded-xl p-3 border-2 border-sky-200">
+          <p className="font-semibold mb-1">🔒 Privacy Notice</p>
+          <p>Your camera feed is processed locally on your device. No video data is sent to our servers or stored anywhere.</p>
+        </div>
       </div>
     </div>
   );

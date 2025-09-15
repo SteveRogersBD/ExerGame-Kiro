@@ -31,19 +31,19 @@ type HomeworkItem = HomeworkWithVideo & {
 // -----------------------------
 // dummy data (replace with api calls later)
 // -----------------------------
-const DUMMY_VIDEOS: VideoItem[] = [
-  { id: 1, title: "dora: beach cleanup", url: "/sample/sample1.mp4" },
-  { id: 2, title: "animal moves warmup" },
-  { id: 3, title: "space jumps adventure" },
-  { id: 4, title: "jungle squats" },
-];
+// const DUMMY_VIDEOS: VideoItem[] = [
+//   { id: 1, title: "dora: beach cleanup", url: "/sample/sample1.mp4" },
+//   { id: 2, title: "animal moves warmup" },
+//   { id: 3, title: "space jumps adventure" },
+//   { id: 4, title: "jungle squats" },
+// ];
 
-const DUMMY_HOMEWORK: HomeworkItem[] = [
-  { id: 101, title: "dora episode quiz", status: "NOT_STARTED", type: "video", videoUrl: "/sample/sample1.mp4" },
-  { id: 102, title: "count the seashells", status: "IN_PROGRESS", type: "quiz" },
-  { id: 103, title: "balance basics", status: "DONE", type: "video" },
-  { id: 104, title: "color match", status: "NOT_STARTED", type: "quiz" },
-];
+// const DUMMY_HOMEWORK: HomeworkItem[] = [
+//   { id: 101, title: "dora episode quiz", status: "NOT_STARTED", type: "video", videoUrl: "/sample/sample1.mp4" },
+//   { id: 102, title: "count the seashells", status: "IN_PROGRESS", type: "quiz" },
+//   { id: 103, title: "balance basics", status: "DONE", type: "video" },
+//   { id: 104, title: "color match", status: "NOT_STARTED", type: "quiz" },
+// ];
 
 // -----------------------------
 // theme helpers

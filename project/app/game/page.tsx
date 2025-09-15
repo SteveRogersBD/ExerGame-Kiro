@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, Play, Book, Trophy, Star, AlertCircle } from "lucide-react";
+import { ArrowLeft, Trophy, AlertCircle, Book, Play } from "lucide-react";
 import { WebcamPermission } from "@/components/game/WebcamPermission";
 import { WebcamView } from "@/components/game/WebcamView";
+import { InteractiveVideoGame } from "@/components/game/InteractiveVideoGame";
 
 // emoji background layer (same as play page)
 function EmojiBackground() {
@@ -201,75 +202,32 @@ export default function GamePage() {
           </div>
         )}
 
-        {(gameState === 'waiting-gesture' || gameState === 'playing') && (
-          /* Webcam view and game */
+        {gameState === 'waiting-gesture' && (
+          /* Webcam view waiting for hand gesture */
           <div className="w-full max-w-4xl mx-auto">
-            {gameState === 'waiting-gesture' ? (
-              <>
-                <div className="text-center mb-6">
-                  <h1 className="text-4xl font-black text-sky-900 drop-shadow mb-2">
-                    {decodeURIComponent(itemTitle)}
-                  </h1>
-                  <p className="text-xl text-sky-700 font-medium">
-                    {itemType === 'homework' 
-                      ? "Ready for your interactive homework session!" 
-                      : "Get ready for motion-controlled fun!"
-                    }
-                  </p>
-                </div>
-                
-                <WebcamView
-                  onHandRaised={handleHandRaised}
-                  isWaitingForGesture={true}
-                />
-              </>
-            ) : (
-              /* Game playing screen with webcam */
-              <div className="text-center">
-                <div className="mb-6 rounded-3xl border-4 border-emerald-300 bg-white/90 p-8 shadow-xl">
-                  <h2 className="mb-6 text-3xl font-black text-emerald-800">
-                    Playing: {decodeURIComponent(itemTitle)}
-                  </h2>
-                  
-                  {/* Webcam continues running during game */}
-                  <div className="mb-6">
-                    <WebcamView
-                      onHandRaised={() => {}} // No action needed during gameplay
-                      isWaitingForGesture={false}
-                    />
-                  </div>
-                  
-                  {/* Game content */}
-                  <div className="mb-6 rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-8">
-                    <div className="mb-4 flex justify-center">
-                      <div className="animate-bounce">
-                        <Star className="h-20 w-20 text-yellow-500" />
-                      </div>
-                    </div>
-                    
-                    <p className="text-xl text-emerald-700 font-medium mb-4">
-                      Great job! You're doing amazing! 🌟
-                    </p>
-                    
-                    <div className="bg-white rounded-xl p-4 border-2 border-emerald-200">
-                      <p className="text-emerald-800 font-semibold">
-                        {itemType === 'homework' 
-                          ? "Interactive homework in progress... Use gestures to answer questions!"
-                          : "Motion-controlled video playing... Follow along with the exercises!"
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <button
-                    onClick={handleCompleteGame}
-                    className="rounded-3xl bg-gradient-to-r from-purple-400 to-pink-500 px-10 py-3 text-xl font-black text-white shadow-lg hover:from-purple-500 hover:to-pink-600 transform hover:scale-105 transition-all"
-                  >
-                    Complete & Return 🏆
-                  </button>
-                </div>
-              </div>
-            )}
+            <div className="text-center mb-6">
+              <h1 className="text-4xl font-black text-sky-900 drop-shadow mb-2">
+                {decodeURIComponent(itemTitle)}
+              </h1>
+              <p className="text-xl text-sky-700 font-medium">
+                Raise your hand to start the interactive video game!
+              </p>
+            </div>
+            
+            <WebcamView
+              onHandRaised={handleHandRaised}
+              isWaitingForGesture={true}
+            />
+          </div>
+        )}
+
+        {gameState === 'playing' && (
+          /* Interactive Video Game */
+          <div className="w-full">
+            <InteractiveVideoGame
+              videoUrl="https://www.youtube.com/watch?v=L8A4XbM5sXA&t=6s"
+              onGameComplete={handleCompleteGame}
+            />
           </div>
         )}
 
