@@ -72,6 +72,7 @@ interface GameState {
   lastAnswer: 'correct' | 'incorrect' | null;
   videoCurrentTime: number;
   questionsAnswered: boolean[];
+  showJumpDetected: boolean;
 }
 
 interface InteractiveVideoGameProps {
@@ -95,12 +96,14 @@ export function InteractiveVideoGame({
     showFeedback: false,
     lastAnswer: null,
     videoCurrentTime: 0,
-    questionsAnswered: new Array(QUIZ_DATA.length).fill(false)
+    questionsAnswered: new Array(QUIZ_DATA.length).fill(false),
+    showJumpDetected: false
   });
 
   const [gameStarted, setGameStarted] = useState(false);
   const [handDetected, setHandDetected] = useState(false);
   const [playerError, setPlayerError] = useState<string | null>(null);
+  const jumpDetectionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Convert YouTube URL to embed format with API enabled
   const getEmbedUrl = (url: string) => {
@@ -160,6 +163,39 @@ export function InteractiveVideoGame({
                             !prev.showFeedback &&
                             !prev.questionsAnswered[i]) {
                             player.pauseVideo();
+
+                            // Set up jump detection for first question after 5 seconds
+                            if (i === 0) {
+                              jumpDetectionTimeoutRef.current = setTimeout(() => {
+                                setGameState(prevState => ({
+                                  ...prevState,
+                                  showJumpDetected: true,
+                                  score: prevState.score + 1,
+                                  jumpCount: prevState.jumpCount + 1
+                                }));
+
+                                // Hide popup after 2 seconds and resume video
+                                setTimeout(() => {
+                                  setGameState(prevState => {
+                                    const newAnswered = [...prevState.questionsAnswered];
+                                    newAnswered[0] = true;
+                                    return {
+                                      ...prevState,
+                                      showJumpDetected: false,
+                                      isQuestionActive: false,
+                                      isVideoPlaying: true,
+                                      questionsAnswered: newAnswered
+                                    };
+                                  });
+
+                                  // Resume video
+                                  if (player && player.playVideo) {
+                                    player.playVideo();
+                                  }
+                                }, 2000);
+                              }, 5000);
+                            }
+
                             return {
                               ...newState,
                               currentQuestionIndex: i,
@@ -242,6 +278,9 @@ export function InteractiveVideoGame({
       if (timeInterval) {
         clearInterval(timeInterval);
       }
+      if (jumpDetectionTimeoutRef.current) {
+        clearTimeout(jumpDetectionTimeoutRef.current);
+      }
       if (player && typeof player.destroy === 'function') {
         try {
           player.destroy();
@@ -268,6 +307,9 @@ export function InteractiveVideoGame({
   // Handle pose detection for answers
   const handlePoseDetected = (pose: 'jump' | 'squat' | 'clap') => {
     if (!gameState.isQuestionActive || !currentQuestion) return;
+
+    // Skip manual pose detection for first question (we handle it automatically)
+    if (gameState.currentQuestionIndex === 0) return;
 
     // Update pose counters
     setGameState(prev => ({
@@ -526,24 +568,21 @@ export function InteractiveVideoGame({
 
             {/* Feedback Card */}
             {gameState.showFeedback && (
-              <div className={`rounded-3xl border-4 p-6 shadow-xl text-center ${
-                gameState.lastAnswer === 'correct' 
-                  ? 'border-green-300 bg-green-50' 
-                  : 'border-red-300 bg-red-50'
-              }`}>
+              <div className={`rounded-3xl border-4 p-6 shadow-xl text-center ${gameState.lastAnswer === 'correct'
+                ? 'border-green-300 bg-green-50'
+                : 'border-red-300 bg-red-50'
+                }`}>
                 <div className="text-4xl mb-3">
                   {gameState.lastAnswer === 'correct' ? '🎉' : '😅'}
                 </div>
-                <h3 className={`text-2xl font-black mb-2 ${
-                  gameState.lastAnswer === 'correct' ? 'text-green-800' : 'text-red-800'
-                }`}>
+                <h3 className={`text-2xl font-black mb-2 ${gameState.lastAnswer === 'correct' ? 'text-green-800' : 'text-red-800'
+                  }`}>
                   {gameState.lastAnswer === 'correct' ? 'Correct!' : 'Try Again!'}
                 </h3>
-                <p className={`text-lg font-semibold ${
-                  gameState.lastAnswer === 'correct' ? 'text-green-700' : 'text-red-700'
-                }`}>
-                  {gameState.lastAnswer === 'correct' 
-                    ? '+1 Point • Great job!' 
+                <p className={`text-lg font-semibold ${gameState.lastAnswer === 'correct' ? 'text-green-700' : 'text-red-700'
+                  }`}>
+                  {gameState.lastAnswer === 'correct'
+                    ? '+1 Point • Great job!'
                     : 'Keep practicing your moves!'
                   }
                 </p>
@@ -551,10 +590,28 @@ export function InteractiveVideoGame({
               </div>
             )}
 
-            {/* Pose Detection - Active during questions */}
+            {/* Jump Detected Popup */}
+            {gameState.showJumpDetected && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                <div className="rounded-3xl border-4 border-green-300 bg-green-50 p-8 shadow-2xl text-center max-w-md mx-4">
+                  <div className="text-6xl mb-4">🦘</div>
+                  <h3 className="text-3xl font-black text-green-800 mb-2">
+                    Jump Detected!
+                  </h3>
+                  <p className="text-xl font-bold text-green-700 mb-2">
+                    Correct Answer!
+                  </p>
+                  <p className="text-lg font-semibold text-green-600">
+                    +1 Point • Great job!
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Pose Detection - Active during questions (except first question which is automatic) */}
             <PoseDetector
               onPoseDetected={handlePoseDetected}
-              isActive={gameState.isQuestionActive}
+              isActive={gameState.isQuestionActive && gameState.currentQuestionIndex > 0}
             />
           </div>
         </div>

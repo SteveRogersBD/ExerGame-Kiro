@@ -94,7 +94,13 @@ export default function GamePage() {
   const itemTitle = searchParams.get('title') || 'Game';
 
   const handleBackToPlay = () => {
-    router.push('/play');
+    try {
+      router.push('/play');
+    } catch (error) {
+      console.error('Navigation error:', error);
+      // Fallback navigation
+      window.location.href = '/play';
+    }
   };
 
   const handlePermissionGranted = () => {
